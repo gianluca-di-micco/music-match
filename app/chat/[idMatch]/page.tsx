@@ -1,21 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  useParams
+} from "next/navigation";
 
 export default function ChatPage() {
 
-  const params = useParams();
+  const params =
+    useParams();
 
   const idMatch =
     params.idMatch as string;
 
-  const [messaggi, setMessaggi] =
+  const [utente,
+    setUtente] =
+    useState<any>(null);
+
+  const [messaggi,
+    setMessaggi] =
     useState<any[]>([]);
 
   const [nuovoMessaggio,
     setNuovoMessaggio] =
     useState("");
+
+  useEffect(() => {
+
+    const u =
+      JSON.parse(
+        localStorage.getItem(
+          "utente"
+        ) || "null"
+      );
+
+    setUtente(u);
+
+  }, []);
 
   async function caricaMessaggi() {
 
@@ -45,7 +70,9 @@ export default function ChatPage() {
       );
 
     return () =>
-      clearInterval(interval);
+      clearInterval(
+        interval
+      );
 
   }, [idMatch]);
 
@@ -54,6 +81,10 @@ export default function ChatPage() {
     if (
       nuovoMessaggio.trim() === ""
     ) {
+      return;
+    }
+
+    if (!utente) {
       return;
     }
 
@@ -76,9 +107,10 @@ export default function ChatPage() {
             Number(idMatch),
 
           idUtenteMittente:
-            1
+            utente.idUtente
 
         })
+
       }
     );
 
@@ -97,7 +129,9 @@ export default function ChatPage() {
       }}
     >
 
-      <h1>Chat</h1>
+      <h1>
+        Chat
+      </h1>
 
       <div
         style={{

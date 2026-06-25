@@ -1,33 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState
+} from "react";
+
 import Link from "next/link";
-import ProteggiPagina from "../components/ProteggiPagina";
+
+import ProteggiPagina
+from "../components/ProteggiPagina";
 
 export default function MatchPage() {
-  
-  const [utente, setUtente] =
-  useState<any>(null);
+
+  const [utente,
+    setUtente] =
+    useState<any>(null);
+
+  const [matches,
+    setMatches] =
+    useState<any[]>([]);
 
   useEffect(() => {
 
     const u =
       JSON.parse(
-        localStorage.getItem("utente") || "null"
+        localStorage.getItem(
+          "utente"
+        ) || "null"
       );
 
     setUtente(u);
 
-  }, []);  
-  
-  const [matches, setMatches] =
-    useState<any[]>([]);
+  }, []);
 
   useEffect(() => {
+
+    if (!utente) return;
+
     async function caricaMatch() {
+
       const response =
         await fetch(
-          "/api/match?idUtente=1"
+          `/api/match?idUtente=${utente.idUtente}`
         );
 
       const data =
@@ -37,69 +51,131 @@ export default function MatchPage() {
     }
 
     caricaMatch();
-  }, []);
+
+  }, [utente]);
 
   return (
+
     <ProteggiPagina>
-		<main
-		  style={{
-			padding: "20px",
-			maxWidth: "900px"
-		  }}
-		>
-		  <h1>I miei Match</h1>
 
-		  {matches.length === 0 ? (
-			<p>Nessun match</p>
-		  ) : (
-			matches.map((match) => (
-			  <div
-				key={match.idMatch}
-				style={{
-				  border: "1px solid #ccc",
-				  borderRadius: "8px",
-				  padding: "15px",
-				  marginBottom: "20px"
-				}}
-			  >
-				<h2>
-				  {
-					match.utenteOttiene
-					  .username
-				  }
-				</h2>
+      <main
+        style={{
+          padding: "20px",
+          maxWidth: "900px"
+        }}
+      >
 
-				<p>
-				  <strong>Bio:</strong>{" "}
-				  {
-					match.utenteOttiene
-					  .bio ||
-					  "Nessuna bio"
-				  }
-				</p>
+        <h1>
+          I miei Match
+        </h1>
 
-				<p>
-				  <strong>
-					Esperienza:
-				  </strong>{" "}
-				  {
-					match.utenteOttiene
-					  .livelloEsperienza ||
-					  "Non specificata"
-				  }
-				</p>
+        {matches.length === 0 ? (
 
-				<Link
-				  href={`/chat/${match.idMatch}`}
-				>
-				  <button>
-					Apri Chat
-				  </button>
-				</Link>
-			  </div>
-			))
-		  )}
-		</main>
-	</ProteggiPagina>
+          <p>
+            Nessun match
+          </p>
+
+        ) : (
+
+          matches.map(
+            (match) => {
+
+              const altroUtente =
+
+                match.idUtenteOrigina ===
+                utente.idUtente
+
+                  ? match.utenteOttiene
+
+                  : match.utenteOrigina;
+
+              return (
+
+                <div
+                  key={
+                    match.idMatch
+                  }
+                  style={{
+                    border:
+                      "1px solid #ccc",
+
+                    borderRadius:
+                      "8px",
+
+                    padding:
+                      "15px",
+
+                    marginBottom:
+                      "20px"
+                  }}
+                >
+
+                  <h2>
+                    {
+                      altroUtente
+                        .username
+                    }
+                  </h2>
+
+                  <p>
+
+                    <strong>
+                      Bio:
+                    </strong>
+
+                    {" "}
+
+                    {
+                      altroUtente
+                        .bio ||
+
+                      "Nessuna bio"
+                    }
+
+                  </p>
+
+                  <p>
+
+                    <strong>
+                      Esperienza:
+                    </strong>
+
+                    {" "}
+
+                    {
+                      altroUtente
+                        .livelloEsperienza ||
+
+                      "Non specificata"
+                    }
+
+                  </p>
+
+                  <Link
+                    href={
+                      `/chat/${match.idMatch}`
+                    }
+                  >
+
+                    <button>
+                      Apri Chat
+                    </button>
+
+                  </Link>
+
+                </div>
+
+              );
+
+            }
+          )
+
+        )}
+
+      </main>
+
+    </ProteggiPagina>
+
   );
+
 }

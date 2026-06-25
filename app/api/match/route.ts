@@ -1,8 +1,13 @@
 import { prisma } from "@/lib/prisma";
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+) {
+
   try {
-    const body = await request.json();
+
+    const body =
+      await request.json();
 
     const {
       idUtenteOrigina,
@@ -13,54 +18,82 @@ export async function POST(request: Request) {
       !idUtenteOrigina ||
       !idUtenteOttiene
     ) {
+
       return Response.json(
         {
-          error: "Dati mancanti"
+          error:
+            "Dati mancanti"
         },
         {
           status: 400
         }
       );
+
     }
 
     const matchEsistente =
       await prisma.match.findFirst({
+
         where: {
-          idUtenteOrigina,
-          idUtenteOttiene
+
+          OR: [
+
+            {
+              idUtenteOrigina,
+              idUtenteOttiene
+            },
+
+            {
+              idUtenteOrigina:
+                idUtenteOttiene,
+
+              idUtenteOttiene:
+                idUtenteOrigina
+            }
+
+          ]
+
         }
+
       });
 
     if (matchEsistente) {
+
       return Response.json(
         {
-          error: "Match già esistente"
+          error:
+            "Match già esistente"
         },
         {
           status: 409
         }
       );
+
     }
 
     const match =
       await prisma.match.create({
+
         data: {
+
           idUtenteOrigina,
           idUtenteOttiene
+
         }
+
       });
-	
-	await prisma.notifica.create({
 
-		data: {
+    await prisma.notifica.create({
 
-		  idUtente:
-			idUtenteOttiene,
+      data: {
 
-		  messaggio:
-			"Hai ricevuto una richiesta di match"
+        idUtente:
+          idUtenteOttiene,
 
-        }
+        messaggio:
+          "Hai ricevuto una richiesta di match"
+
+      }
 
     });
 
@@ -68,6 +101,7 @@ export async function POST(request: Request) {
       {
         message:
           "Match creato con successo",
+
         match
       },
       {
@@ -88,37 +122,80 @@ export async function POST(request: Request) {
         status: 500
       }
     );
+
   }
+
 }
 
 export async function GET(
   request: Request
 ) {
+
   const { searchParams } =
     new URL(request.url);
 
   const idUtente =
     Number(
-      searchParams.get("idUtente")
+      searchParams.get(
+        "idUtente"
+      )
     );
 
   const matches =
     await prisma.match.findMany({
+
       where: {
-        idUtenteOrigina: idUtente
+
+        OR: [
+
+          {
+            idUtenteOrigina:
+              idUtente
+          },
+
+          {
+            idUtenteOttiene:
+              idUtente
+          }
+
+        ]
+
       },
 
       include: {
-        utenteOttiene: {
+
+        utenteOrigina: {
+
           select: {
+
             idUtente: true,
             username: true,
             bio: true,
             livelloEsperienza: true
+
           }
+
+        },
+
+        utenteOttiene: {
+
+          select: {
+
+            idUtente: true,
+            username: true,
+            bio: true,
+            livelloEsperienza: true
+
+          }
+
         }
+
       }
+
     });
 
-  return Response.json(matches);
+  return Response.json(
+    matches
+  );
+
 }

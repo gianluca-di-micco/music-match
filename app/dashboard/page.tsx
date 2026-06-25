@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProteggiPagina from "../components/ProteggiPagina";
+
+import ProteggiPagina
+from "../components/ProteggiPagina";
+
+import LogoutButton
+from "../components/LogoutButton";
 
 export default function DashboardPage() {
 
@@ -45,132 +50,148 @@ export default function DashboardPage() {
 
   if (!utente) {
 
-	  return (
-		<main
-		  style={{
-			padding: "20px"
-		  }}
-		>
-		  <h1>DEBUG</h1>
+    return (
 
-		  <p>
-			Utente non trovato nel localStorage
-		  </p>
+      <main
+        style={{
+          padding: "20px"
+        }}
+      >
 
-		  <a href="/login">
-			Vai al Login
-		  </a>
-		</main>
-	  );
+        <h1>
+          DEBUG
+        </h1>
+
+        <p>
+          Utente non trovato nel localStorage
+        </p>
+
+        <a href="/login">
+          Vai al Login
+        </a>
+
+      </main>
+
+    );
   }
 
   return (
-    
-	<ProteggiPagina>
 
-		<main
-		  style={{
-			padding: "20px",
-			maxWidth: "800px"
-		  }}
-		>
+    <ProteggiPagina>
 
-		  <h1>
-			Dashboard
-		  </h1>
+      <main
+        style={{
+          padding: "20px",
+          maxWidth: "800px"
+        }}
+      >
 
-		  <h2>
-			Benvenuto {utente.username}
-		  </h2>
+        <h1>
+          Dashboard
+        </h1>
 
-		  {!dashboard ? (
+        <h2>
+          Benvenuto {utente.username}
+        </h2>
 
-			<p>
-			  Caricamento dati...
-			</p>
+        <LogoutButton />
 
-		  ) : (
+        {!dashboard ? (
 
-			<div
-			  style={{
-				display: "grid",
-				gap: "15px",
-				marginTop: "20px"
-			  }}
-			>
+          <p>
+            Caricamento dati...
+          </p>
 
-			  <div
-				style={{
-				  border: "1px solid gray",
-				  padding: "15px"
-				}}
-			  >
-				<h3>Match</h3>
+        ) : (
 
-				<p>
-				  {dashboard.totaleMatch}
-				</p>
-			  </div>
+          <div
+            style={{
+              display: "grid",
+              gap: "15px",
+              marginTop: "20px"
+            }}
+          >
 
-			  <div
-				style={{
-				  border: "1px solid gray",
-				  padding: "15px"
-				}}
-			  >
-				<h3>Media caricati</h3>
+            <div
+              style={{
+                border: "1px solid gray",
+                padding: "15px"
+              }}
+            >
+              <h3>Match</h3>
 
-				<p>
-				  {dashboard.totaleMedia}
-				</p>
-			  </div>
+              <p>
+                {dashboard.totaleMatch}
+              </p>
+            </div>
 
-			  <div
-				style={{
-				  border: "1px solid gray",
-				  padding: "15px"
-				}}
-			  >
-				<h3>Eventi</h3>
+            <div
+              style={{
+                border: "1px solid gray",
+                padding: "15px"
+              }}
+            >
+              <h3>
+                Media caricati
+              </h3>
 
-				<p>
-				  {dashboard.totaleEventi}
-				</p>
-			  </div>
+              <p>
+                {dashboard.totaleMedia}
+              </p>
+            </div>
 
-			  <div
-				style={{
-				  border: "1px solid gray",
-				  padding: "15px"
-				}}
-			  >
-				<h3>Segnalazioni ricevute</h3>
+            <div
+              style={{
+                border: "1px solid gray",
+                padding: "15px"
+              }}
+            >
+              <h3>
+                Eventi
+              </h3>
 
-				<p>
-				  {dashboard.totaleSegnalazioni}
-				</p>
-			  </div>
+              <p>
+                {dashboard.totaleEventi}
+              </p>
+            </div>
 
-			  <div
-				style={{
-				  border: "1px solid gray",
-				  padding: "15px"
-				}}
-			  >
-				<h3>Sanzioni</h3>
+            <div
+              style={{
+                border: "1px solid gray",
+                padding: "15px"
+              }}
+            >
+              <h3>
+                Segnalazioni ricevute
+              </h3>
 
-				<p>
-				  {dashboard.totaleSanzioni}
-				</p>
-			  </div>
+              <p>
+                {dashboard.totaleSegnalazioni}
+              </p>
+            </div>
 
-			</div>
+            <div
+              style={{
+                border: "1px solid gray",
+                padding: "15px"
+              }}
+            >
+              <h3>
+                Sanzioni
+              </h3>
 
-		  )}
+              <p>
+                {dashboard.totaleSanzioni}
+              </p>
+            </div>
 
-		</main>
-	
-	</ProteggiPagina>
+          </div>
+
+        )}
+
+      </main>
+
+    </ProteggiPagina>
 
   );
 }

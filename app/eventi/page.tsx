@@ -23,16 +23,17 @@ export default function EventiPage() {
     useState<any[]>([]);
 
   async function caricaEventi() {
-
-    const response =
-      await fetch(
-        "/api/eventi"
-      );
-
-    const data =
-      await response.json();
-
-    setEventi(data);
+    try {
+      const response = await fetch("/api/eventi");
+      if (!response.ok) {
+        console.error("Errore API /eventi:", response.status);
+        return;
+      }
+      const data = await response.json();
+      setEventi(data);
+    } catch (error) {
+      console.error("Errore di rete o parsing:", error);
+    }
   }
 
   async function partecipa(

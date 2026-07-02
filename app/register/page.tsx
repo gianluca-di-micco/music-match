@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [utente, setUtente] =
   useState<any>(null);
 
@@ -48,9 +50,11 @@ export default function RegisterPage() {
       await response.json();
 
     if (response.ok) {
+      localStorage.setItem("utente", JSON.stringify(data));
       setMessaggio(
         "Registrazione completata!"
       );
+      router.push("/profilo");
     } else {
       setMessaggio(data.error);
     }
@@ -107,6 +111,13 @@ export default function RegisterPage() {
           Registrati
         </button>
       </form>
+
+      <br />
+      <br />
+
+      <button type="button" onClick={() => router.push("/login")}>
+        Vai al Login
+      </button>
 
       <p>{messaggio}</p>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import ProteggiPagina
 from "../components/ProteggiPagina";
@@ -9,6 +10,7 @@ import LogoutButton
 from "../components/LogoutButton";
 
 export default function DashboardPage() {
+  const router = useRouter();
 
   const [utente, setUtente] =
     useState<any>(null);
@@ -95,6 +97,13 @@ export default function DashboardPage() {
         </h2>
 
         <LogoutButton />
+
+        <br />
+        <br />
+
+        <button onClick={() => router.push("/musicisti")}>
+          Visualizza Musicisti
+        </button>
 
         {!dashboard ? (
 

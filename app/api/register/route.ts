@@ -7,6 +7,17 @@ export async function POST(
   const body =
     await request.json();
 
+  if (!body.email || !body.username || !body.password) {
+    return Response.json(
+      {
+        error: "Tutti i campi sono obbligatori"
+      },
+      {
+        status: 400
+      }
+    );
+  }
+
   const utenteEsistente =
     await prisma.utente.findFirst({
       where: {

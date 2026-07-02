@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ProteggiPagina from "../components/ProteggiPagina";
 
 interface Strumento {
@@ -14,6 +15,7 @@ interface Genere {
 }
 
 export default function ProfiloPage() {
+  const router = useRouter();
 	
   const [utente, setUtente] =
   useState<any>(null);
@@ -239,6 +241,15 @@ export default function ProfiloPage() {
 			onClick={salvaProfilo}
 		  >
 			Salva Profilo
+		  </button>
+
+		  <br />
+		  <br />
+
+		  <button
+			onClick={() => router.push("/dashboard")}
+		  >
+			Vai alla Dashboard
 		  </button>
 
 		  <p>{messaggio}</p>

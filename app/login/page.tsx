@@ -118,6 +118,15 @@ export default function LoginPage() {
         Accedi
       </button>
 
+      <br />
+      <br />
+
+      <button
+        onClick={() => router.push("/register")}
+      >
+        Registrati
+      </button>
+
     </main>
 
   );
